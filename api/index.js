@@ -3,7 +3,9 @@ const { faker } = require('@faker-js/faker');
 
 const server = http.createServer((req, res) => {
     const path = req.url;
-
+res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     if (path === '/api/data') {
         const limit =  500; 
         const users = [];
