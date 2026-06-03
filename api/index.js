@@ -1,47 +1,38 @@
 const http = require('http');
-const url = require('url');
+const { faker } = require('@faker-js/faker');
 
-const server = http.createServer((req,res) =>{
-    const path = req.url
+const server = http.createServer((req, res) => {
+    const path = req.url;
 
-    if(path === '/api/data'){
-        res.end(JSON.stringify([
-            {
-               "id": "1",
-                "name": 'John Doe',
-                "email": 'john@gmail.com'
-            },
-            {
-               "id": "2",
-                "name": 'Jane Smith',
-                "email": 'jane@gmail.com'
-            },
-            {
-               "id": "3",
-                "name": 'Bob Johnson',
-                "email": 'bob@gmail.com'
-            },
-            {
-               "id": "4",
-                "name": 'Alice Williams',
-                "email": 'alice@gmail.com'
-            },
-            {
-               "id": "5",
-                "name": 'Charlie Brown',
-                "email": 'charlie@gmail.com'
-            }
-        ], null, 2)
-            
-        )
-    }else{
-        res.end('hello from the server')
+    if (path === '/api/data') {
+        const limit =  1000; 
+        const users = [];
+        for (let i = 1; i <= limit; i++) {
+            users.push({
+                id: i,
+                firstName: faker.person.firstName(),
+                lastName: faker.person.lastName(),
+                email: faker.internet.email(),
+                phone: faker.phone.number(),
+                age: faker.number.int({ min: 18, max: 60 }),
+                jobTitle: faker.person.jobTitle(),
+                city: faker.location.city(),
+                isActive: faker.datatype.boolean()
+            });
+        }
+
+        // Response header set karein
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        // JSON array ko string mein convert karke bhejein
+        res.end(JSON.stringify(users));
+        
+    } else {
+        res.writeHead(200, { 'Content-Type': 'text/plain' });
+        res.end('Hello from the server! Access /api/data to get users.');
     }
-})
-
-const PORT = process.env.PORT || 3000;
-
-server.listen(PORT, () => {
-    console.log(`server is listening on port ${PORT}`);
 });
 
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+    console.log(`Server is listening on port ${PORT}`);
+});
