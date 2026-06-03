@@ -5,7 +5,7 @@ const server = http.createServer((req, res) => {
     const path = req.url;
 
     if (path === '/api/data') {
-        const limit =  1000; 
+        const limit =  500; 
         const users = [];
         for (let i = 1; i <= limit; i++) {
             users.push({
